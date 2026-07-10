@@ -36,8 +36,8 @@ dev = [
 project-mcp = "project_mcp.server:main"
 
 [project.urls]
-Homepage = "https://github.com/jeffmodeler/project-mcp"
-Issues = "https://github.com/jeffmodeler/project-mcp/issues"
+Homepage = "https://github.com/jeffmodeler/ms_project-mcp"
+Issues = "https://github.com/jeffmodeler/ms_project-mcp/issues"
 
 [build-system]
 requires = ["hatchling"]

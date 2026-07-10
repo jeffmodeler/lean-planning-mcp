@@ -1,6 +1,6 @@
 # project-mcp
 
-[![CI](https://github.com/jeffmodeler/project-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/project-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
@@ -41,7 +41,7 @@ no próprio Microsoft Project.
 ### Opção A — `uv` (recomendada)
 
 ```bash
-git clone https://github.com/jeffmodeler/project-mcp.git
+git clone https://github.com/jeffmodeler/ms_project-mcp.git
 cd project-mcp
 uv sync
 ```
@@ -49,7 +49,7 @@ uv sync
 ### Opção B — `pip`
 
 ```bash
-pip install git+https://github.com/jeffmodeler/project-mcp.git
+pip install git+https://github.com/jeffmodeler/ms_project-mcp.git
 ```
 
 Para suporte a `.mpp`:
@@ -57,7 +57,7 @@ Para suporte a `.mpp`:
 ```bash
 uv sync --extra mpp
 # ou
-pip install "project-mcp[mpp] @ git+https://github.com/jeffmodeler/project-mcp.git"
+pip install "project-mcp[mpp] @ git+https://github.com/jeffmodeler/ms_project-mcp.git"
 ```
 
 ## Integração com Claude Desktop
@@ -80,14 +80,15 @@ Adicione ao seu `claude_desktop_config.json`:
 }
 ```
 
-Reinicie o Claude Desktop. As 35 tools ficam disponíveis em qualquer conversa
-(13 do núcleo MS Project + 10 AWP + 12 LPS).
+Reinicie o Claude Desktop. As 36 tools ficam disponíveis em qualquer conversa
+(14 do núcleo MS Project + 10 AWP + 12 LPS).
 
 ## Tools disponíveis
 
 | Tool | Finalidade |
 |---|---|
 | `load_project` | Carrega um `.xml` MSPDI ou `.mpp` na memória |
+| `open_in_ms_project` | Abre o projeto carregado (ou um caminho informado) no Microsoft Project via associação padrão do SO |
 | `project_info` | Título, autor, janela do cronograma, moeda, contagens agregadas |
 | `list_tasks` | Filtra tarefas por tipo, criticidade, substring no nome, top N |
 | `get_task` | Registro completo de uma tarefa por UID, ID ou nome |

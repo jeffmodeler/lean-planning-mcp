@@ -1,6 +1,6 @@
 # project-mcp
 
-[![CI](https://github.com/jeffmodeler/project-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/project-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
@@ -41,7 +41,7 @@ Microsoft Project itself.
 ### Option A — `uv` (recommended)
 
 ```bash
-git clone https://github.com/jeffmodeler/project-mcp.git
+git clone https://github.com/jeffmodeler/ms_project-mcp.git
 cd project-mcp
 uv sync
 ```
@@ -49,7 +49,7 @@ uv sync
 ### Option B — `pip`
 
 ```bash
-pip install git+https://github.com/jeffmodeler/project-mcp.git
+pip install git+https://github.com/jeffmodeler/ms_project-mcp.git
 ```
 
 For `.mpp` support:
@@ -57,7 +57,7 @@ For `.mpp` support:
 ```bash
 uv sync --extra mpp
 # or
-pip install "project-mcp[mpp] @ git+https://github.com/jeffmodeler/project-mcp.git"
+pip install "project-mcp[mpp] @ git+https://github.com/jeffmodeler/ms_project-mcp.git"
 ```
 
 ## Claude Desktop integration
@@ -80,14 +80,15 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
-Restart Claude Desktop. The 35 tools become available in any conversation
-(13 core MS Project + 10 AWP + 12 LPS).
+Restart Claude Desktop. The 36 tools become available in any conversation
+(14 core MS Project + 10 AWP + 12 LPS).
 
 ## Tools
 
 | Tool | Purpose |
 |---|---|
 | `load_project` | Load an MSPDI `.xml` or `.mpp` file into memory |
+| `open_in_ms_project` | Open the loaded (or a given) project file in Microsoft Project via the OS default association |
 | `project_info` | Title, author, schedule window, currency, aggregate counts |
 | `list_tasks` | Filter tasks by type, criticality, name substring, top N |
 | `get_task` | Full record of a single task by UID, ID, or name |
