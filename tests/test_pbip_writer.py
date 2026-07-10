@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from project_mcp import mspdi
-from project_mcp.pbip_writer import PbipWriter
+from msproject_lean_mcp import mspdi
+from msproject_lean_mcp.pbip_writer import PbipWriter
 
 FIXTURE = Path(__file__).parent / "fixtures" / "sample.xml"
 

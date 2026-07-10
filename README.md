@@ -1,6 +1,6 @@
-# project-mcp
+# msproject-lean-mcp
 
-[![CI](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/ms_project-mcp/actions/workflows/ci.yml)
+[![CI](https://github.com/jeffmodeler/msproject-lean-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/jeffmodeler/msproject-lean-mcp/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 
@@ -41,15 +41,15 @@ Microsoft Project itself.
 ### Option A — `uv` (recommended)
 
 ```bash
-git clone https://github.com/jeffmodeler/ms_project-mcp.git
-cd project-mcp
+git clone https://github.com/jeffmodeler/msproject-lean-mcp.git
+cd msproject-lean-mcp
 uv sync
 ```
 
 ### Option B — `pip`
 
 ```bash
-pip install git+https://github.com/jeffmodeler/ms_project-mcp.git
+pip install git+https://github.com/jeffmodeler/msproject-lean-mcp.git
 ```
 
 For `.mpp` support:
@@ -57,7 +57,7 @@ For `.mpp` support:
 ```bash
 uv sync --extra mpp
 # or
-pip install "project-mcp[mpp] @ git+https://github.com/jeffmodeler/ms_project-mcp.git"
+pip install "msproject-lean-mcp[mpp] @ git+https://github.com/jeffmodeler/msproject-lean-mcp.git"
 ```
 
 ## Claude Desktop integration
@@ -67,13 +67,13 @@ Add to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "project-mcp": {
+    "msproject-lean-mcp": {
       "command": "uv",
       "args": [
         "--directory",
-        "C:\\path\\to\\project-mcp",
+        "C:\\path\\to\\msproject-lean-mcp",
         "run",
-        "project-mcp"
+        "msproject-lean-mcp"
       ]
     }
   }

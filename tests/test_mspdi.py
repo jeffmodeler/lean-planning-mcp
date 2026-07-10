@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from project_mcp import mspdi
+from msproject_lean_mcp import mspdi
 
 FIXTURE = Path(__file__).parent / "fixtures" / "sample.xml"
 

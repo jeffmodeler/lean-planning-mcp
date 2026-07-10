@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from project_mcp import awp, mspdi, sidecar
+from msproject_lean_mcp import awp, mspdi, sidecar
 
 FIXTURE = Path(__file__).parent / "fixtures" / "sample.xml"
 

@@ -1,4 +1,4 @@
-"""project-mcp: MCP server exposing Microsoft Project data as tools."""
+"""msproject-lean-mcp: MCP server exposing Microsoft Project data as tools."""
 from __future__ import annotations
 
 import json
@@ -10,16 +10,16 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from project_mcp import awp, lps, mspdi
-from project_mcp.pbip_writer import PbipWriter
+from msproject_lean_mcp import awp, lps, mspdi
+from msproject_lean_mcp.pbip_writer import PbipWriter
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
-logger = logging.getLogger("project-mcp")
+logger = logging.getLogger("msproject-lean-mcp")
 
-mcp = FastMCP("project-mcp")
+mcp = FastMCP("msproject-lean-mcp")
 
 _state: dict[str, mspdi.Project | None] = {"project": None}
 
@@ -57,11 +57,11 @@ def load_project(path: str) -> str:
         project = mspdi.parse_file(file_path)
     elif suffix == ".mpp":
         try:
-            from project_mcp import mpp_loader  # type: ignore
+            from msproject_lean_mcp import mpp_loader  # type: ignore
         except ImportError:
             return _serialize({
                 "error": ".mpp requires the optional 'mpp' extra. "
-                         "Install with: uv pip install 'project-mcp[mpp]' "
+                         "Install with: uv pip install 'msproject-lean-mcp[mpp]' "
                          "or export the file as XML from Microsoft Project."
             })
         project = mpp_loader.parse_file(file_path)

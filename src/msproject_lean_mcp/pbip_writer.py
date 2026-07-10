@@ -18,7 +18,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from project_mcp.mspdi import Project
+from msproject_lean_mcp.mspdi import Project
 
 
 def _tmdl_escape(value: str | None) -> str:
