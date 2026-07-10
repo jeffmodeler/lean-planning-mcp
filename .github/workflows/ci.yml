@@ -24,3 +24,28 @@ jobs:
         run: uv run ruff check src tests
       - name: Run pytest
         run: uv run pytest -v --cov=project_mcp --cov-report=term-missing
+
+  mpp-import-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install "3.12"
+      - name: Install dependencies (incl. mpp extra)
+        run: uv sync --extra dev --extra mpp
+      - name: Import mpp_loader and start the JVM
+        run: |
+          uv run python -c "
+          from project_mcp import mpp_loader
+          mpp_loader._ensure_jvm()
+          from org.mpxj.reader import UniversalProjectReader
+          UniversalProjectReader()
+          print('mpp_loader imports and the JVM starts correctly.')
+          "
