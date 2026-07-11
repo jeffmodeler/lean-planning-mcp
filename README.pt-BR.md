@@ -258,15 +258,23 @@ a confiabilidade da última semana.
 `labor_unavailable`, `equipment_breakdown`, `rework`, `permit`,
 `prerequisite_incomplete`, `scope_change`, `other`.
 
-## Skill companion (Claude Code)
+## Skill companion (Claude Code, Claude Desktop, claude.ai)
 
-O repo versiona uma skill em [skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md)
-que ensina o Claude a *operar* as 49 tools: ordem correta de setup AWP,
-ritual semanal do LPS (lookahead + snapshot na segunda, PPC + variância na
-sexta), interpretação de métricas (PPC, TA/TMR, restrições atrasadas) e um
-relatório de insights sob demanda que cruza todas as camadas.
+O repo versiona uma **skill adaptativa** em
+[skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md). Ela detecta
+se as tools do MCP estão disponíveis na sessão:
 
-Instale copiando pro diretório de skills do Claude Code:
+- **Modo operação** (MCP presente): opera as 49 tools na ordem certa —
+  sequência de setup AWP, ritual semanal do LPS (lookahead + snapshot,
+  fechamento binário + PPC/variância), gates de liberação, interpretação
+  de métricas.
+- **Modo consultor** (MCP ausente): metodologia pura — cálculo manual de
+  PPC/TA/TMR de dados colados, análise de MSPDI XML exportado, revisão de
+  dimensionamento de IWP, insights entre camadas. A skill anuncia o modo
+  ativo e cai graciosamente pro consultor se o servidor estiver configurado
+  mas offline.
+
+### Instalação — Claude Code
 
 ```bash
 # Windows
@@ -275,9 +283,12 @@ xcopy /E /I skills\lean-planning %USERPROFILE%\.claude\skills\lean-planning
 cp -r skills/lean-planning ~/.claude/skills/lean-planning
 ```
 
-O servidor MCP funciona sem a skill, mas a skill codifica as regras da
-metodologia que as tools sozinhas não explicam — como o fato de que revisar
-o lookahead sem snapshot perde silenciosamente o histórico de TA/TMR.
+### Instalação — Claude Desktop / claude.ai
+
+Envie o arquivo [dist/lean-planning-skill.zip](dist/lean-planning-skill.zip)
+em **Configurações → Capacidades → Skills**. Sem o servidor MCP a skill roda
+em modo consultor; no Claude Desktop com o servidor configurado, roda em
+modo operação completo.
 
 ## Arquitetura sidecar
 

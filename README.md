@@ -255,15 +255,21 @@ equipment, access, permit, prerequisite, other.
 **Variance reasons**: weather, design_change, material_delay, labor_unavailable,
 equipment_breakdown, rework, permit, prerequisite_incomplete, scope_change, other.
 
-## Companion skill (Claude Code)
+## Companion skill (Claude Code, Claude Desktop, claude.ai)
 
-The repo ships a versioned skill at [skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md)
-that teaches Claude *how to operate* the 49 tools: the correct AWP setup
-order, the weekly LPS ritual (lookahead + snapshot on Monday, PPC + variance
-close-out on Friday), metric interpretation (PPC, TA/TMR, late constraints)
-and an on-demand insights report that cross-references all layers.
+The repo ships a versioned **adaptive skill** at
+[skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md). It detects
+whether the MCP tools are available in the session:
 
-Install it by copying to your Claude Code skills directory:
+- **Operation mode** (MCP present): drives the 49 tools in the correct
+  order — AWP setup sequence, weekly LPS ritual (lookahead + snapshot,
+  binary close-out + PPC/variance), release gates, metric interpretation.
+- **Advisor mode** (MCP absent): pure methodology — manual PPC/TA/TMR
+  calculation from pasted data, analysis of exported MSPDI XML, IWP sizing
+  review, cross-layer insights. The skill announces which mode is active
+  and falls back gracefully if the server is configured but offline.
+
+### Install — Claude Code
 
 ```bash
 # Windows
@@ -272,9 +278,12 @@ xcopy /E /I skills\lean-planning %USERPROFILE%\.claude\skills\lean-planning
 cp -r skills/lean-planning ~/.claude/skills/lean-planning
 ```
 
-The MCP server works without the skill, but the skill encodes the
-methodology rules the tools alone cannot explain — like why a lookahead
-review without a snapshot silently loses your TA/TMR history.
+### Install — Claude Desktop / claude.ai
+
+Upload [dist/lean-planning-skill.zip](dist/lean-planning-skill.zip) in
+**Settings → Capabilities → Skills**. Without the MCP server the skill runs
+in advisor mode; in Claude Desktop with the MCP server configured it runs
+in full operation mode.
 
 ## Sidecar storage
 

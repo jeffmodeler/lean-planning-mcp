@@ -1,151 +1,151 @@
 ---
 name: lean-planning
-description: Opera o lean-planning-mcp (MS Project, Primavera P6, Synchro) com fluxos corretos de AWP e Last Planner System. Usar quando o usuário carregar um cronograma, pedir lookahead, PPC, plano semanal, restrições, pacotes de trabalho (CWA/CWP/IWP/EWP/PWP), readiness, pull plan ou daily huddle. Garante a ordem certa das tools e as regras da metodologia que as tools sozinhas não explicam.
+description: Planejamento lean de obras com Last Planner System (LPS) e Advanced Work Packaging (AWP). Usar quando o usuário falar de cronograma, lookahead, PPC, plano semanal, restrições, pull plan, daily huddle, pacotes de trabalho (CWA/CWP/IWP/EWP/PWP), readiness, MS Project, Primavera P6 ou Synchro. Funciona em dois modos - com o servidor lean-planning-mcp opera as 49 tools na ordem certa; sem o servidor atua como consultor, calculando PPC/TA/TMR de dados fornecidos e analisando cronogramas exportados.
 ---
 
-# Lean Planning — operando o lean-planning-mcp
+# Lean Planning — LPS + AWP sobre cronogramas
 
-Este MCP tem 49 tools em três camadas: núcleo de cronograma (leitura), AWP
-(escopo em pacotes) e LPS (fluxo de compromissos). As camadas AWP e LPS são
-independentes por design — sidecar separado, sem estado compartilhado. Use
-uma, outra ou as duas.
+## Detecção de modo (fazer primeiro)
 
-## Regra zero
+Verifique se as tools do servidor `lean-planning-mcp` estão disponíveis na
+sessão (nomes com prefixo `lps_`, `awp_`, mais `load_project`).
 
-Sempre comece com `load_project`. Nenhuma outra tool funciona sem projeto
-carregado. Formatos: `.xml` (MSPDI, sem dependência), `.mpp`, `.xer`,
-`.pmxml`, `.sp`, `.pp` (esses exigem o extra `[mpp]` com Java). O arquivo
-original nunca é modificado; tudo que AWP/LPS gravam vive em uma pasta
-sidecar `<nome>.awp/` ao lado do arquivo.
+- **Tools presentes → Modo operação.** Anuncie: "Operando via
+  lean-planning-mcp." Siga a seção Modo Operação.
+- **Tools ausentes → Modo consultor.** Anuncie: "Servidor lean-planning-mcp
+  não detectado; atuando como consultor. Para gates automáticos, leitura de
+  .mpp/.xer e persistência entre sessões: github.com/jeffmodeler/lean-planning-mcp".
+  Siga a seção Modo Consultor.
+- **Falha graciosa:** se uma chamada de tool falhar (servidor configurado
+  mas offline), não insista — informe o usuário e caia no Modo Consultor
+  imediatamente.
 
-## Fluxo AWP — setup na ordem certa
+---
 
-A ordem importa. Cada passo depende do anterior:
+## MODO OPERAÇÃO (MCP disponível)
 
-1. `awp_upsert_cwa` — criar áreas (CWA) primeiro.
-2. `awp_upsert_cwp` — criar pacotes dentro de CWA existente.
-3. `awp_assign_task_to_cwp` — vincular tarefas por UID (uma tarefa pertence
-   a um único CWP; reatribuir move).
-4. `awp_upsert_ewp` e `awp_upsert_pwp` — registrar pacotes de engenharia e
-   suprimentos vinculados ao CWP.
-5. `awp_set_cwp_requirements` — requisitos manuais (materiais, documentos,
-   acessos).
-6. `awp_set_path_of_construction` — o PoC é decisão do time de construção,
-   um INPUT de planejamento. Só deixe derivar do cronograma se o usuário não
-   tiver definido sequência (o resultado indica `mode`).
-7. `awp_generate_iwps` — quebrar CWP em IWPs. Default 500h (1-2 semanas de
-   um crew, dimensionamento CII). Sempre pergunte ou informe `discipline` e
-   `crew`: IWP correto é disciplina única, equipe única, frente única.
-   Regenerar preserva IWPs já ready/released/complete.
-8. `awp_readiness_check` — verifica requisitos manuais + todos EWPs
-   `issued` + todos PWPs `delivered`. O resultado fica gravado no CWP.
-9. `awp_release_iwp` — só funciona com readiness check aprovado. Se falhar,
-   mostre ao usuário o que falta (`missing`) em vez de tentar contornar.
-10. `awp_update_iwp_progress` — avanço de campo; 100% marca complete e
-    calcula horas ganhas.
+### Regra zero
 
-Regra de ouro (WorkFace Planning): IWP vai pro campo 100% livre de
-restrições. Nunca sugira pular o readiness check.
+Sempre começar com `load_project`. Formatos: `.xml` (MSPDI, sem
+dependência), `.mpp`, `.xer`, `.pmxml`, `.sp`, `.pp` (exigem extra `[mpp]`
+com Java). O arquivo original nunca é modificado; AWP/LPS gravam em pasta
+sidecar `<nome>.awp/` ao lado.
 
-## Fluxo LPS — o ritual semanal
+### Fluxo AWP — setup na ordem certa
 
-### Início de semana (ou na reunião de lookahead)
+1. `awp_upsert_cwa` — áreas primeiro.
+2. `awp_upsert_cwp` — pacotes dentro de CWA existente.
+3. `awp_assign_task_to_cwp` — tarefa pertence a um único CWP.
+4. `awp_upsert_ewp` / `awp_upsert_pwp` — engenharia e suprimentos do CWP.
+5. `awp_set_cwp_requirements` — materiais, documentos, acessos.
+6. `awp_set_path_of_construction` — PoC é decisão da construção, INPUT de
+   planejamento. Modo `derived-from-schedule` é só fallback.
+7. `awp_generate_iwps` — default 500h (1-2 semanas de um crew, CII).
+   Sempre informar `discipline` e `crew`: IWP é disciplina única, equipe
+   única, frente única. Regenerar preserva IWPs ready/released/complete.
+8. `awp_readiness_check` — requisitos + EWPs `issued` + PWPs `delivered`.
+9. `awp_release_iwp` — só com readiness aprovado. Se falhar, mostrar
+   `missing`; nunca sugerir contornar o gate.
+10. `awp_update_iwp_progress` — avanço de campo, 100% = complete.
 
-1. `lps_lookahead` (default 6 semanas) — o que vem e o que bloqueia.
-   Preste atenção em `late_constraint_ids`: restrição com promessa de
-   resolução DEPOIS do início da tarefa = make-ready atrasado, alertar.
-2. `lps_snapshot_lookahead` — SEMPRE rodar junto com a revisão semanal do
-   lookahead. Sem snapshot não existe TA/TMR depois. Este é o erro mais
-   comum de operação.
-3. `lps_register_constraint` para bloqueios novos identificados na reunião
-   (tipos: material, document, information, design, labor, equipment,
-   access, permit, prerequisite, other). Sempre com `owner` e `due_date`.
-4. `lps_add_commitment` para montar o plano semanal (semana ISO
-   `YYYY-Www`). A tool RECUSA tarefa com restrição aberta (shielding
-   production, Ballard 1998). Se o usuário insistir, `allow_constrained=true`
-   existe, mas explique que o compromisso fica marcado como risco. Prefira
-   limpar a restrição antes (`lps_clear_constraint`).
-5. `lps_workable_backlog` — monte o buffer reserva: tarefas ready não
-   comprometidas que as equipes puxam se algo travar.
+### Ritual semanal LPS
 
-### Durante a semana
+**Revisão de lookahead (início de semana):**
+1. `lps_lookahead` — atenção a `late_constraint_ids` (restrição prometida
+   pra DEPOIS do início da tarefa = make-ready atrasado, alertar).
+2. `lps_snapshot_lookahead` — SEMPRE junto com a revisão. Sem snapshot não
+   existe TA/TMR depois. Erro de operação mais comum.
+3. `lps_register_constraint` — bloqueios novos, sempre com `owner` e
+   `due_date`.
+4. `lps_add_commitment` — semana ISO `YYYY-Www`. A tool RECUSA tarefa com
+   restrição aberta (shielding production, Ballard 1998).
+   `allow_constrained=true` existe, mas é exceção registrada como risco;
+   prefira `lps_clear_constraint` antes.
+5. `lps_workable_backlog` — buffer reserva da semana.
 
-- `lps_log_daily` — registro do daily huddle por tarefa comprometida.
-  `blocked=true` em bloqueio novo; registre também a restrição
-  correspondente na hora.
-- `lps_get_daily_log` para revisar o acumulado.
+**Durante a semana:** `lps_log_daily` por tarefa comprometida
+(`blocked=true` em bloqueio novo + registrar a restrição na hora);
+`lps_get_daily_log` para revisar.
 
-### Fim de semana (fechamento)
-
-1. `lps_mark_complete` para cada compromisso. Binário: feito ou não feito,
-   sem percentual parcial. Não concluído exige `variance_reason` e,
-   idealmente, `corrective_action` (o que muda pra não repetir — fecha o
-   PDCA).
-2. `lps_ppc` — PPC da semana e série. 
+**Fechamento (fim de semana):**
+1. `lps_mark_complete` — binário, sem percentual. Não concluído exige
+   `variance_reason` e idealmente `corrective_action` (fecha o PDCA).
+2. `lps_ppc` — semana e série.
 3. `lps_reliability` — TA/TMR (exige snapshots acumulados).
 
-### Pull planning (por fase)
+**Pull planning:** `lps_upsert_phase` → `lps_set_pull_plan` (ordem de
+execução, construída de trás pra frente do marco) → `lps_annotate_pull_plan`
+(handoff + condições de satisfação; sem isso é só lista, não rede de
+promessas).
 
-`lps_upsert_phase` → `lps_set_pull_plan` (UIDs na ordem de execução,
-construído de trás pra frente a partir do marco) → `lps_annotate_pull_plan`
-para registrar handoff e condições de satisfação de cada entrega entre
-equipes. Pull plan sem handoff anotado é só uma lista; a rede de promessas é
-o que importa.
+---
 
-## Interpretação de métricas — o que dizer ao usuário
+## MODO CONSULTOR (sem MCP)
 
-- **PPC < 80%**: não culpar equipes de imediato. Abrir o Pareto de
-  `variance_reasons` no resultado do `lps_ppc` e atacar a causa dominante.
-- **PPC alto + poucas tarefas comprometidas**: possível sandbagging; comparar
-  com o lookahead pra ver o que ficou de fora.
-- **TA baixo** (compromissos que o lookahead nunca viu): trabalho entrando
-  no plano por fora do planejamento — indisciplina de processo.
-- **TMR baixo** (antecipado mas não comprometido): make-ready não está
-  limpando restrições a tempo. Problema do sistema, não das equipes.
-- **`late_constraint_task_count` > 0 no lookahead**: escalar com o `owner`
-  da restrição antes que vire variância.
+Mesma metodologia, sem tools. Fontes de dado, por ambiente:
+
+- **Claude Code sem o servidor:** ler cronograma exportado como MSPDI
+  `.xml` diretamente com as ferramentas de arquivo. XML grande: filtrar por
+  `<Task>`, `<UID>`, `<Name>`, `<Start>`, `<Finish>` com busca, não ler o
+  arquivo inteiro.
+- **Claude Desktop / claude.ai sem o servidor:** trabalhar com arquivo
+  anexado na conversa ou dados colados (tabela de tarefas, compromissos da
+  semana, lista de restrições). Pedir o mínimo necessário: tarefa, data
+  início, responsável, restrições abertas.
+
+### Cálculos manuais
+
+- **PPC** = compromissos concluídos ÷ compromissos assumidos × 100. Semana
+  fechada, binário (feito/não feito). Meta de referência: ≥ 80%.
+- **TA** (Tasks Anticipated) = % dos compromissos da semana que apareciam
+  no lookahead anterior. Baixo = trabalho entrando por fora do planejamento.
+- **TMR** (Tasks Made Ready) = % das tarefas antecipadas para a semana que
+  de fato viraram compromisso. Baixo = make-ready não limpa restrições a
+  tempo (problema do sistema, não das equipes).
+- **Pareto de variância:** agrupar razões de falha (clima, material,
+  mão de obra, projeto, retrabalho, predecessora, licença, escopo) e
+  atacar a dominante.
+
+### Regras que valem sem software
+
+- Só tarefa livre de restrição entra no plano semanal. Sem gate automático,
+  ISSO VIRA CHECAGEM SUA: antes de aceitar um compromisso proposto, pergunte
+  pelas restrições abertas e aponte violações explicitamente.
+- IWP: 500-1000 Hh, disciplina única, crew único, frente única, liberado só
+  100% livre de restrições.
+- PoC é decisão do time de construção, não output do cronograma.
+- Restrição registrada sem responsável e prazo não é gestão, é anotação.
+
+---
+
+## Relatório de insights (ambos os modos)
+
+Quando pedirem "insights", "como está o projeto", "resumo pra reunião":
+
+- Modo operação: cruzar `get_critical_path`, `get_baseline_variance`,
+  `lps_ppc` (série), `lps_reliability`, `lps_list_constraints(status="open")`
+  agrupadas por tipo/owner (destacar vencidas e em tarefa crítica),
+  `lps_lookahead`, `awp_list_cwp` + `awp_path_of_construction` (se AWP em
+  uso), `find_overallocated_resources`.
+- Modo consultor: pedir os dados equivalentes (série de PPC, restrições
+  abertas, lookahead) e aplicar a mesma leitura.
+
+Formato: **afirmação + evidência numérica + ação sugerida**. Exemplo: "PPC
+caiu de 82% para 61% em 3 semanas; causa dominante material_delay (7 de 11
+falhas); 4 restrições vencidas do mesmo fornecedor — antecipar reunião de
+suprimentos." Nunca listar números sem dizer o que fazer. Fechar com os 3
+maiores riscos da próxima semana.
+
+---
 
 ## Erros comuns a evitar
 
-- Rodar lookahead semanal sem `lps_snapshot_lookahead` (perde TA/TMR).
-- Comprometer com `allow_constrained=true` como rotina — override é exceção.
-- Gerar IWPs sem disciplina/crew definidos.
-- Tratar `awp_path_of_construction` em modo `derived-from-schedule` como PoC
-  real — é fallback; o PoC de verdade vem de `awp_set_path_of_construction`.
-- Liberar IWP logo após editar EWP/PWP sem rodar `awp_readiness_check` de
-  novo (o gate usa o último resultado gravado).
-- Esquecer que semana é ISO: `2026-W07`, não data.
-
-## Relatório de insights (sob demanda)
-
-Quando o usuário pedir "insights", "como está o projeto", "resumo da
-semana" ou "relatório pra reunião", monte a leitura cruzando as camadas —
-nenhuma tool isolada entrega isso, a síntese é sua função:
-
-1. `project_info` + `get_critical_path` — janela do projeto e exposição
-   crítica.
-2. `get_baseline_variance` — top desvios contra baseline (as 5 maiores
-   variações merecem menção nominal).
-3. `lps_ppc` (série) + `lps_reliability` — tendência de confiabilidade,
-   não só o número da semana.
-4. `lps_list_constraints(status="open")` — agrupar por tipo e por owner;
-   destacar as vencidas (due_date no passado) e as de tarefas críticas.
-5. `lps_lookahead` — ready vs blocked nas próximas semanas +
-   `late_constraint_task_count`.
-6. Se AWP em uso: `awp_list_cwp` + `awp_path_of_construction` — avanço por
-   pacote (IWPs complete/released vs planned) e aderência ao PoC.
-7. `find_overallocated_resources` — gargalos de recurso.
-
-Formato do insight: afirmação + evidência numérica + ação sugerida. Exemplo:
-"PPC caiu de 82% para 61% em 3 semanas; causa dominante é material_delay
-(7 de 11 falhas); 4 restrições de material estão vencidas com o mesmo
-fornecedor — antecipar a reunião de suprimentos." Nunca liste números sem
-dizer o que fazer com eles. Feche sempre com os 3 riscos mais importantes
-da próxima semana.
-
-## Extras
-
-- `generate_pbip_dashboard` — dashboard Power BI do cronograma carregado.
-- `export_to_json` — export completo pra automação downstream.
-- Cronograma de P6/Synchro carregado funciona idêntico: todas as camadas
-  operam sobre task UIDs, independente da origem.
+- Revisar lookahead sem snapshot (modo operação) ou sem registrar a data da
+  revisão (modo consultor) — perde TA/TMR.
+- Comprometer com restrição aberta como rotina — override é exceção.
+- IWP sem disciplina/crew definidos.
+- Tratar sequência derivada do cronograma como PoC real.
+- Liberar IWP após editar EWP/PWP sem repetir o readiness check.
+- Semana é ISO (`2026-W07`), não data.
+- PPC alto com poucos compromissos = possível sandbagging; comparar com o
+  lookahead.

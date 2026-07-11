@@ -41,14 +41,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Corrective action**: `lps_mark_complete` accepts `corrective_action`,
   closing the PDCA loop on variances.
 
-### Added — companion skill
+### Added — adaptive companion skill
 
-- Versioned Claude Code skill at `skills/lean-planning/SKILL.md` teaching
-  the correct operating flows: AWP setup order, weekly LPS ritual
-  (lookahead + snapshot, close-out + PPC), metric interpretation
-  (PPC/TA/TMR/late constraints), common mistakes, and an on-demand
-  cross-layer insights report. Install by copying to
-  `~/.claude/skills/lean-planning/`.
+- Versioned skill at `skills/lean-planning/SKILL.md` teaching the correct
+  operating flows: AWP setup order, weekly LPS ritual (lookahead +
+  snapshot, close-out + PPC), metric interpretation (PPC/TA/TMR/late
+  constraints), common mistakes, and an on-demand cross-layer insights
+  report.
+- The skill is **adaptive**: it detects whether the MCP tools are present
+  in the session. With them it runs in operation mode (drives the 49
+  tools); without them it runs in advisor mode (manual PPC/TA/TMR
+  calculation from pasted data, MSPDI XML analysis, methodology review).
+  It announces the active mode and degrades gracefully when the server is
+  configured but offline.
+- `dist/lean-planning-skill.zip` — ready-to-upload package for Claude
+  Desktop / claude.ai (Settings → Capabilities → Skills). Claude Code
+  installs by copying `skills/lean-planning/` to `~/.claude/skills/`.
 
 ### Added — multi-platform loading
 
