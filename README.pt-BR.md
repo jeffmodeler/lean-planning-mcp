@@ -258,6 +258,27 @@ a confiabilidade da última semana.
 `labor_unavailable`, `equipment_breakdown`, `rework`, `permit`,
 `prerequisite_incomplete`, `scope_change`, `other`.
 
+## Skill companion (Claude Code)
+
+O repo versiona uma skill em [skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md)
+que ensina o Claude a *operar* as 49 tools: ordem correta de setup AWP,
+ritual semanal do LPS (lookahead + snapshot na segunda, PPC + variância na
+sexta), interpretação de métricas (PPC, TA/TMR, restrições atrasadas) e um
+relatório de insights sob demanda que cruza todas as camadas.
+
+Instale copiando pro diretório de skills do Claude Code:
+
+```bash
+# Windows
+xcopy /E /I skills\lean-planning %USERPROFILE%\.claude\skills\lean-planning
+# macOS / Linux
+cp -r skills/lean-planning ~/.claude/skills/lean-planning
+```
+
+O servidor MCP funciona sem a skill, mas a skill codifica as regras da
+metodologia que as tools sozinhas não explicam — como o fato de que revisar
+o lookahead sem snapshot perde silenciosamente o histórico de TA/TMR.
+
 ## Arquitetura sidecar
 
 O `.mpp`/`.xml` permanece como fonte mestre das tarefas (read-only preservado).

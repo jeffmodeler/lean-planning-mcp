@@ -41,6 +41,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Corrective action**: `lps_mark_complete` accepts `corrective_action`,
   closing the PDCA loop on variances.
 
+### Added — companion skill
+
+- Versioned Claude Code skill at `skills/lean-planning/SKILL.md` teaching
+  the correct operating flows: AWP setup order, weekly LPS ritual
+  (lookahead + snapshot, close-out + PPC), metric interpretation
+  (PPC/TA/TMR/late constraints), common mistakes, and an on-demand
+  cross-layer insights report. Install by copying to
+  `~/.claude/skills/lean-planning/`.
+
 ### Added — multi-platform loading
 
 - `load_project` now routes Primavera P6 (`.xer`, `.pmxml`), Synchro

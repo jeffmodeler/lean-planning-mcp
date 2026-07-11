@@ -255,6 +255,27 @@ equipment, access, permit, prerequisite, other.
 **Variance reasons**: weather, design_change, material_delay, labor_unavailable,
 equipment_breakdown, rework, permit, prerequisite_incomplete, scope_change, other.
 
+## Companion skill (Claude Code)
+
+The repo ships a versioned skill at [skills/lean-planning/SKILL.md](skills/lean-planning/SKILL.md)
+that teaches Claude *how to operate* the 49 tools: the correct AWP setup
+order, the weekly LPS ritual (lookahead + snapshot on Monday, PPC + variance
+close-out on Friday), metric interpretation (PPC, TA/TMR, late constraints)
+and an on-demand insights report that cross-references all layers.
+
+Install it by copying to your Claude Code skills directory:
+
+```bash
+# Windows
+xcopy /E /I skills\lean-planning %USERPROFILE%\.claude\skills\lean-planning
+# macOS / Linux
+cp -r skills/lean-planning ~/.claude/skills/lean-planning
+```
+
+The MCP server works without the skill, but the skill encodes the
+methodology rules the tools alone cannot explain — like why a lookahead
+review without a snapshot silently loses your TA/TMR history.
+
 ## Sidecar storage
 
 The `.mpp`/`.xml` file remains authoritative (read-only preserved). Next to
