@@ -1,0 +1,72 @@
+MPX,Microsoft Project for Windows,4.0,ANSI
+10,$,1,2,",",.
+11,1,0,1,8.00,40.00,,,0,0
+12,1,0,480,/,:,am,pm,20,20
+20,Standard,0,1,1,1,1,1,0
+25,1
+25,2,08:00 am,12:00 pm,01:00 pm,05:00 pm
+25,3,08:00 am,12:00 pm,01:00 pm,05:00 pm
+25,4,08:00 am,12:00 pm,01:00 pm,05:00 pm
+25,5,08:00 am,12:00 pm,01:00 pm,05:00 pm
+25,6,08:00 am,12:00 pm,01:00 pm,05:00 pm
+25,7
+30,Obra Residencial Vila Verde,Vila Verde Incorporadora,,Standard,03/08/2026,26/02/2027,1,,,$0.00,$0.00,$0.00,0h,0h,0h,0%,0d,0d,0d,0%,,,,,0d,0d,Residencial unifamiliar 180m2,Jeff Borges
+40,Name,Initials,Work,ID,Max Units,Standard Rate,Overallocated,Unique ID
+41,1,2,20,40,41,42,46,49
+50,Equipe Fundacoes,EF,560h,1,1,$680.00/d,No,1
+50,Equipe Estrutura,EE,880h,2,1,$760.00/d,No,2
+50,Equipe Alvenaria,EA,720h,3,1,$600.00/d,Yes,3
+50,Instalador Hidraulico,IH,240h,4,1,$720.00/d,No,4
+50,Eletricista,EL,160h,5,1,$720.00/d,No,5
+50,Concreto usinado fck30,CO,0h,6,1,$4960.00/d,No,6
+60,Name,WBS,Outline Level,Work,Duration,Baseline Duration,% Complete,Duration Variance,Start,Finish,Baseline Start,Baseline Finish,Finish Variance,Predecessors,Fixed,Milestone,Critical,ID,Constraint Type,Priority,Unique ID,Outline Number,Summary
+61,1,2,3,20,40,41,44,45,50,51,56,57,67,70,80,81,82,90,91,95,98,99,120
+70,Obra Residencial Vila Verde,0,0,2680h,1200h,,0%,,03/08/2026,26/02/2027,,,0h,,Yes,No,Yes,0,As Soon As Possible,Medium,0,0,Yes
+70,Servicos Preliminares,1,1,160h,80h,,0%,,03/08/2026,14/08/2026,,,0h,,Yes,No,Yes,1,As Soon As Possible,Medium,1,1,Yes
+70,Limpeza do terreno e tapume,1.1,2,80h,40h,40h,0%,0h,03/08/2026,07/08/2026,03/08/2026,07/08/2026,0h,,No,No,Yes,2,As Soon As Possible,Medium,2,1.1
+70,"Instalacoes provisorias (agua, luz, barracao)",1.2,2,80h,40h,40h,0%,0h,10/08/2026,14/08/2026,10/08/2026,14/08/2026,0h,2,No,No,Yes,3,As Soon As Possible,Medium,3,1.2
+70,Fundacoes,2,1,560h,200h,,0%,,17/08/2026,18/09/2026,,,0h,,Yes,No,Yes,4,As Soon As Possible,Medium,4,2,Yes
+70,Escavacao e apiloamento,2.1,2,120h,40h,40h,0%,0h,17/08/2026,21/08/2026,17/08/2026,21/08/2026,0h,3,No,No,Yes,5,As Soon As Possible,Medium,5,2.1
+75,1,1,120h,,,,$102.00,,,17/08/2026,21/08/2026,,1
+76,,0,0,NA,NA
+70,Armacao e formas das sapatas,2.2,2,240h,80h,80h,0%,0h,24/08/2026,04/09/2026,24/08/2026,04/09/2026,0h,5,No,No,Yes,6,As Soon As Possible,Medium,6,2.2
+75,1,1,240h,,,,$204.00,,,24/08/2026,04/09/2026,,1
+76,,0,0,NA,NA
+70,Concretagem das sapatas e baldrames,2.3,2,120h,40h,40h,0%,0h,07/09/2026,11/09/2026,07/09/2026,11/09/2026,0h,6,No,No,Yes,7,As Soon As Possible,Medium,7,2.3
+75,1,1,120h,,,,$102.00,,,07/09/2026,11/09/2026,,1
+76,,0,0,NA,NA
+75,6,1,0h,,,,$186.00,,,07/09/2026,11/09/2026,,6
+76,,0,0,NA,NA
+70,Impermeabilizacao dos baldrames,2.4,2,80h,40h,40h,0%,0h,14/09/2026,18/09/2026,14/09/2026,18/09/2026,0h,7FS+4800h,No,No,Yes,8,As Soon As Possible,Medium,8,2.4
+70,Marco: Fundacoes concluidas,2.5,2,0h,0h,,0%,,18/09/2026,18/09/2026,,,0h,8,No,Yes,Yes,9,As Soon As Possible,Medium,9,2.5
+70,Estrutura,3,1,880h,320h,,0%,,21/09/2026,13/11/2026,,,0h,,Yes,No,Yes,10,As Soon As Possible,Medium,10,3,Yes
+70,Pilares e vigas do terreo,3.1,2,360h,120h,120h,0%,0h,21/09/2026,09/10/2026,21/09/2026,09/10/2026,0h,9,No,No,Yes,11,As Soon As Possible,Medium,11,3.1
+75,2,1,360h,,,,$342.00,,,21/09/2026,09/10/2026,,2
+76,,0,0,NA,NA
+70,Laje do terreo,3.2,2,240h,80h,80h,0%,0h,12/10/2026,23/10/2026,12/10/2026,23/10/2026,0h,11,No,No,Yes,12,As Soon As Possible,Medium,12,3.2
+75,2,1,240h,,,,$228.00,,,12/10/2026,23/10/2026,,2
+76,,0,0,NA,NA
+70,Pilares e vigas do pavimento superior,3.3,2,240h,80h,80h,0%,0h,26/10/2026,06/11/2026,26/10/2026,06/11/2026,0h,12,No,No,Yes,13,As Soon As Possible,Medium,13,3.3
+75,2,1,240h,,,,$228.00,,,26/10/2026,06/11/2026,,2
+76,,0,0,NA,NA
+70,Laje de cobertura,3.4,2,120h,40h,40h,0%,0h,09/11/2026,13/11/2026,09/11/2026,13/11/2026,0h,13,No,No,Yes,14,As Soon As Possible,Medium,14,3.4
+70,Alvenaria e Vedacoes,4,1,480h,240h,,0%,,26/10/2026,04/12/2026,,,0h,,Yes,No,No,15,As Soon As Possible,Medium,15,4,Yes
+70,Alvenaria do terreo,4.1,2,240h,120h,120h,0%,0h,26/10/2026,13/11/2026,26/10/2026,13/11/2026,0h,12,No,No,No,16,As Soon As Possible,Medium,16,4.1
+75,3,1,240h,,,,$180.00,,,26/10/2026,13/11/2026,,3
+76,,0,0,NA,NA
+70,Alvenaria do pavimento superior,4.2,2,240h,120h,120h,0%,0h,16/11/2026,04/12/2026,16/11/2026,04/12/2026,0h,"14,16",No,No,No,17,As Soon As Possible,Medium,17,4.2
+75,3,1,240h,,,,$180.00,,,16/11/2026,04/12/2026,,3
+76,,0,0,NA,NA
+70,Instalacoes Eletricas e Hidraulicas,5,1,400h,200h,,0%,,16/11/2026,18/12/2026,,,0h,,Yes,No,No,18,As Soon As Possible,Medium,18,5,Yes
+70,Tubulacoes hidrossanitarias,5.1,2,240h,120h,120h,0%,0h,16/11/2026,04/12/2026,16/11/2026,04/12/2026,0h,16,No,No,No,19,As Soon As Possible,Medium,19,5.1
+75,4,1,240h,,,,$216.00,,,16/11/2026,04/12/2026,,4
+76,,0,0,NA,NA
+70,Eletrodutos e fiacao,5.2,2,160h,80h,80h,0%,0h,07/12/2026,18/12/2026,07/12/2026,18/12/2026,0h,17,No,No,No,20,As Soon As Possible,Medium,20,5.2
+75,5,1,160h,,,,$144.00,,,07/12/2026,18/12/2026,,5
+76,,0,0,NA,NA
+70,Cobertura (telhado e calhas),6,1,240h,120h,120h,0%,0h,16/11/2026,04/12/2026,16/11/2026,04/12/2026,0h,14,No,No,Yes,21,As Soon As Possible,Medium,21,6
+70,"Acabamentos (reboco, piso, pintura)",7,1,800h,400h,360h,0%,40h,07/12/2026,19/02/2027,07/12/2026,12/02/2027,40h,"21,19",No,No,Yes,22,As Soon As Possible,Medium,22,7
+75,3,1,240h,,,,$180.00,,,07/12/2026,19/02/2027,,3
+76,,0,0,NA,NA
+70,Limpeza final e vistoria,8,1,80h,40h,,0%,,22/02/2027,26/02/2027,,,0h,22,No,No,Yes,23,As Soon As Possible,Medium,23,8
+70,Marco: Entrega da obra,9,1,0h,0h,,0%,,26/02/2027,26/02/2027,,,0h,23,No,Yes,Yes,24,As Soon As Possible,Medium,24,9
