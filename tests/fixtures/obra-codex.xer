@@ -1,0 +1,42 @@
+ERMHDR	8.4	2026-07-12	Project	admin	Lean Planning MCP	Admin	BR	USD
+%T	PROJECT
+%F	proj_id	proj_short_name	proj_name	clndr_id	plan_start_date	scd_end_date	add_date	last_recalc_date
+%R	1000	OBRA-RES	Obra Residencial Codex	1	2026-01-05 08:00	2026-07-17 17:00	2026-01-02 08:00	2026-01-02 08:00
+%T	CALENDAR
+%F	clndr_id	default_flag	clndr_name	proj_id	base_clndr_id	last_chng_date	clndr_type	day_hr_cnt	week_hr_cnt	month_hr_cnt	year_hr_cnt	rsrvd_flag	clndr_data
+%R	1	Y	Calendario Obra 8h	1000		2026-01-02 08:00	CA	8	40	172	2080	N	(0||CalendarData()())
+%T	PROJWBS
+%F	wbs_id	proj_id	obs_id	seq_num	est_wt	wbs_short_name	wbs_name	parent_wbs_id	proj_node_flag	sum_data_flag	status_code
+%R	100	1000	1	1	1	OBRA	Obra Residencial		Y	Y	WS_Open
+%R	110	1000	1	2	1	FUND	Fundacoes	100	N	Y	WS_Open
+%R	120	1000	1	3	1	ESTR	Estrutura	100	N	Y	WS_Open
+%R	130	1000	1	4	1	ALV	Alvenaria	100	N	Y	WS_Open
+%R	140	1000	1	5	1	ACAB	Acabamentos	100	N	Y	WS_Open
+%T	TASK
+%F	task_id	proj_id	wbs_id	clndr_id	task_code	task_name	task_type	duration_type	status_code	complete_pct_type	phys_complete_pct	target_drtn	remain_drtn	target_start_date	target_end_date	early_start_date	early_end_date	late_start_date	late_end_date
+%R	1001	1000	110	1	FND-010	Locacao e gabarito	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	40	40	2026-01-05 08:00	2026-01-09 17:00	2026-01-05 08:00	2026-01-09 17:00	2026-01-05 08:00	2026-01-09 17:00
+%R	1002	1000	110	1	FND-020	Escavacao das sapatas	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	64	64	2026-01-12 08:00	2026-01-21 17:00	2026-01-12 08:00	2026-01-21 17:00	2026-01-12 08:00	2026-01-21 17:00
+%R	1003	1000	110	1	FND-030	Armadura e concretagem das fundacoes	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	96	96	2026-01-22 08:00	2026-02-06 17:00	2026-01-22 08:00	2026-02-06 17:00	2026-01-22 08:00	2026-02-06 17:00
+%R	1004	1000	120	1	EST-010	Pilares do pavimento terreo	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	80	80	2026-02-09 08:00	2026-02-20 17:00	2026-02-09 08:00	2026-02-20 17:00	2026-02-09 08:00	2026-02-20 17:00
+%R	1005	1000	120	1	EST-020	Vigas e laje do pavimento terreo	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	120	120	2026-02-23 08:00	2026-03-13 17:00	2026-02-23 08:00	2026-03-13 17:00	2026-02-23 08:00	2026-03-13 17:00
+%R	1006	1000	120	1	EST-030	Estrutura da cobertura	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	80	80	2026-03-16 08:00	2026-03-27 17:00	2026-03-16 08:00	2026-03-27 17:00	2026-03-16 08:00	2026-03-27 17:00
+%R	1007	1000	130	1	ALV-010	Alvenaria externa	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	96	96	2026-03-30 08:00	2026-04-14 17:00	2026-03-30 08:00	2026-04-14 17:00	2026-03-30 08:00	2026-04-14 17:00
+%R	1008	1000	130	1	ALV-020	Alvenaria interna	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	80	80	2026-04-15 08:00	2026-04-28 17:00	2026-04-15 08:00	2026-04-28 17:00	2026-04-15 08:00	2026-04-28 17:00
+%R	1009	1000	130	1	ALV-030	Chapisco e reboco	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	120	120	2026-04-29 08:00	2026-05-19 17:00	2026-04-29 08:00	2026-05-19 17:00	2026-04-29 08:00	2026-05-19 17:00
+%R	1010	1000	140	1	ACB-010	Instalacoes e revestimentos	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	160	160	2026-05-20 08:00	2026-06-16 17:00	2026-05-20 08:00	2026-06-16 17:00	2026-05-20 08:00	2026-06-16 17:00
+%R	1011	1000	140	1	ACB-020	Pintura e esquadrias	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	144	144	2026-06-17 08:00	2026-07-10 17:00	2026-06-17 08:00	2026-07-10 17:00	2026-06-17 08:00	2026-07-10 17:00
+%R	1012	1000	140	1	ACB-030	Limpeza final e entrega	TT_Task	DT_FixedDrtn	TK_NotStart	CP_Drtn	0	40	40	2026-07-13 08:00	2026-07-17 17:00	2026-07-13 08:00	2026-07-17 17:00	2026-07-13 08:00	2026-07-17 17:00
+%T	TASKPRED
+%F	task_pred_id	task_id	pred_task_id	proj_id	pred_proj_id	pred_type	lag_hr_cnt
+%R	2001	1002	1001	1000	1000	PR_FS	0
+%R	2002	1003	1002	1000	1000	PR_FS	0
+%R	2003	1004	1003	1000	1000	PR_FS	0
+%R	2004	1005	1004	1000	1000	PR_FS	0
+%R	2005	1006	1005	1000	1000	PR_FS	0
+%R	2006	1007	1006	1000	1000	PR_FS	0
+%R	2007	1008	1007	1000	1000	PR_FS	0
+%R	2008	1009	1008	1000	1000	PR_FS	0
+%R	2009	1010	1009	1000	1000	PR_FS	0
+%R	2010	1011	1010	1000	1000	PR_FS	0
+%R	2011	1012	1011	1000	1000	PR_FS	0
+%E
