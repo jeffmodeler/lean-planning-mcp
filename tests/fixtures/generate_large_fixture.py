@@ -89,7 +89,7 @@ def task_xml(uid, name, level, outline, summary, milestone, critical,
     return "\n".join(lines)
 
 
-def main(out_path: str) -> None:
+def main(out_path: str, blocks: int = 4) -> None:
     start0 = datetime(2026, 8, 3)
     tasks, assignments = [], []
     uid = 0
@@ -103,7 +103,7 @@ def main(out_path: str) -> None:
 
     block_finish_uids = []
     project_finish = start0
-    for b in range(1, 5):  # 4 blocks
+    for b in range(1, blocks + 1):
         block_uid = uid
         block_start = add_workdays(start0, (b - 1) * 15)  # staggered blocks
         cursor = block_start
@@ -203,4 +203,4 @@ def main(out_path: str) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "obra-grande.xml")
+    main(sys.argv[1] if len(sys.argv) > 1 else "obra-grande.xml", int(sys.argv[2]) if len(sys.argv) > 2 else 4)
