@@ -203,4 +203,6 @@ def main(out_path: str, blocks: int = 4) -> None:
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "obra-grande.xml", int(sys.argv[2]) if len(sys.argv) > 2 else 4)
+    out = sys.argv[1] if len(sys.argv) > 1 else "obra-grande.xml"
+    n_blocks = int(sys.argv[2]) if len(sys.argv) > 2 else 4
+    main(out, n_blocks)

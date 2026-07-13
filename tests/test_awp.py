@@ -422,3 +422,41 @@ def test_manual_poc_overrides_schedule_order(project: mspdi.Project) -> None:
     assert planned["mode"] == "planned"
     ids = [r["cwp_id"] for r in planned["sequence"]]
     assert ids.index("CWP-LATE") < ids.index("CWP-EARLY")
+
+
+# ---------------------------------------------------------------- IWP ready transition
+
+
+def test_passing_readiness_promotes_iwps_to_ready(project: mspdi.Project) -> None:
+    _cwp_with_iwps(project)
+    awp.readiness_check(project, "CWP-01")  # passes (no requirements)
+    payload = sidecar.load_awp(project.source_path)
+    statuses = {i["status"] for i in payload["iwp"] if i["cwp_id"] == "CWP-01"}
+    assert statuses == {"ready"}
+
+
+def test_failing_readiness_demotes_iwps_to_planned(project: mspdi.Project) -> None:
+    _cwp_with_iwps(project)
+    awp.readiness_check(project, "CWP-01")  # promotes to ready
+    awp.upsert_ewp(project, "EWP-01", "Desenhos", "CWP-01", status="planned")
+    awp.readiness_check(project, "CWP-01")  # now fails
+    payload = sidecar.load_awp(project.source_path)
+    statuses = {i["status"] for i in payload["iwp"] if i["cwp_id"] == "CWP-01"}
+    assert statuses == {"planned"}
+
+
+def test_invalidation_demotes_ready_iwps(project: mspdi.Project) -> None:
+    _cwp_with_iwps(project)
+    awp.readiness_check(project, "CWP-01")
+    awp.set_cwp_requirements(project, "CWP-01", materials=["concreto"])
+    payload = sidecar.load_awp(project.source_path)
+    statuses = {i["status"] for i in payload["iwp"] if i["cwp_id"] == "CWP-01"}
+    assert statuses == {"planned"}
+
+
+def test_generate_iwps_preserves_ready(project: mspdi.Project) -> None:
+    iwp_id = _cwp_with_iwps(project)
+    awp.readiness_check(project, "CWP-01")  # all IWPs now ready
+    regenerated = awp.generate_iwps(project, "CWP-01", max_hours_per_iwp=16.0)
+    assert iwp_id in regenerated["preserved"]
+    assert regenerated["iwp_count"] == 0  # nothing left in 'planned' to regroup

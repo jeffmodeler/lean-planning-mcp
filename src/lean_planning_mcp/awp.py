@@ -65,12 +65,26 @@ def _find_pwp(payload: dict[str, Any], pwp_id: str) -> dict[str, Any] | None:
 def _invalidate_readiness(payload: dict[str, Any], cwp_id: str | None) -> None:
     """Drop a CWP's cached readiness result after anything it depends on
     changes (requirements, EWP or PWP status). Forces a fresh
-    readiness_check before any IWP release."""
+    readiness_check before any IWP release, and demotes 'ready' IWPs back
+    to 'planned' — their verified state no longer holds."""
     if not cwp_id:
         return
     cwp = _find_cwp(payload, cwp_id)
     if cwp is not None:
         cwp.pop("last_readiness", None)
+    _set_iwp_readiness(payload, cwp_id, ready=False)
+
+
+def _set_iwp_readiness(payload: dict[str, Any], cwp_id: str, ready: bool) -> None:
+    """Move a CWP's IWPs between 'planned' and 'ready'. Released/complete
+    IWPs are never touched."""
+    for iwp in payload["iwp"]:
+        if iwp.get("cwp_id") != cwp_id:
+            continue
+        if ready and iwp.get("status") == "planned":
+            iwp["status"] = "ready"
+        elif not ready and iwp.get("status") == "ready":
+            iwp["status"] = "planned"
 
 
 def _task_to_cwp_map(payload: dict[str, Any]) -> dict[int, str]:
@@ -321,6 +335,9 @@ def readiness_check(
         "missing": missing,
         "checked_at": datetime.now(UTC).isoformat(),
     }
+    # Passing check promotes the CWP's planned IWPs to 'ready'
+    # (constraint-free, awaiting release); failing check demotes them.
+    _set_iwp_readiness(payload, cwp_id, ready=is_ready)
     sidecar.save_awp(project.source_path, payload)
     return {
         "cwp_id": cwp_id,
@@ -572,6 +589,7 @@ def generate_iwps(
             return {
                 "cwp_id": cwp_id, "iwp_count": 0, "iwp": [],
                 "preserved_count": len(preserved),
+                "preserved": [i["id"] for i in preserved],
                 "note": "All tasks belong to IWPs already ready/released/complete.",
             }
         return {"error": f"CWP '{cwp_id}' has no tasks assigned."}

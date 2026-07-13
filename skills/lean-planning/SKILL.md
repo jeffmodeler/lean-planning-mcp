@@ -44,6 +44,8 @@ sidecar `<nome>.awp/` ao lado.
    Sempre informar `discipline` e `crew`: IWP é disciplina única, equipe
    única, frente única. Regenerar preserva IWPs ready/released/complete.
 8. `awp_readiness_check` — requisitos + EWPs `issued` + PWPs `delivered`.
+   Aprovado: IWPs `planned` do CWP viram `ready`. Reprovado ou qualquer
+   mudanca em requisito/EWP/PWP: `ready` volta pra `planned`.
 9. `awp_release_iwp` — só com readiness aprovado. Se falhar, mostrar
    `missing`; nunca sugerir contornar o gate.
 10. `awp_update_iwp_progress` — avanço de campo, 100% = complete.
